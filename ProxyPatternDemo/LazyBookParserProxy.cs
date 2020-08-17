@@ -6,19 +6,18 @@ namespace ProxyPatternDemo
 {
     public class LazyBookParserProxy : IBookParser
     {
-        private BookParser _bookParser = null;
+        private Lazy<BookParser> _bookParser;
         private string _book;
 
         public LazyBookParserProxy(string book)
         {
             _book = book;
+            _bookParser = new Lazy<BookParser>(() => new BookParser(_book));
         }
 
         public int GetNumberOfChars()
         {
-            if (null == _bookParser)
-                _bookParser = new BookParser(_book);
-            return _bookParser.GetNumberOfChars();
+            return _bookParser.Value.GetNumberOfChars();
         }
     }
 }
